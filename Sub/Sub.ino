@@ -44,12 +44,9 @@ double setServoPulse(uint8_t n, int pulse) {
   double pulselength;
   
   pulselength = 1000000;   // 1,000,000 us per second
-  pulselength /= 60;   // 60 Hz
-  Serial.print(pulselength); Serial.println(" us per period"); 
+  pulselength /= 60;   // 60 Hz  
   pulselength /= 4096;  // 12 bits of resolution
-  Serial.print(pulselength); Serial.println(" us per bit"); 
   pulse /= pulselength;
-  Serial.println(pulse);
   return pulse;
 }
 
