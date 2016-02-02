@@ -18,7 +18,7 @@ int up = 2;
 int down = 0;
 int left = 4;
 int right = 5;
-int throttle;
+int throttle = A0;
 int buttonStates;
 
 IPAddress SubIp(129, 6, 15, 28);
