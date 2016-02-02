@@ -80,9 +80,28 @@ int msgToArray(int msg){
   control[3] = throttle;
 }
 
+
+//servo mapping: 0= front left, 1 = front right, 2 = back right, 3 = back left, 4 = rudder;
 void servoControl(int fronts, int backs, int rudder, int throttle){
   if(control[1] = 1){
+    driver.setPWM(0, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(-45));
+  }else if(control[1] = 2){
+    driver.setPWM(0, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(45));
+  }else{
+    driver.setPWM(0, 0, 0);
     driver.setPWM(1, 0, 0);
+  }
+  if(control[2] = 1){
+    driver.setPWM(2, 0, degToPulse(-45));
+    driver.setPWM(3, 0, degToPulse(45));
+  }else if(control[2]){
+    driver.setPWM(2, 0, degToPulse(45));
+    driver.setPWM(3, 0, degToPulse(-45));
+  }else{
+    driver.setPWM(2, 0, 0);
+    driver.setPWM(3, 0, 0);
   }
 }
  
