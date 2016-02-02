@@ -1,21 +1,17 @@
+//set up the needed libraries.
 #include <ESP8266WiFi.h>
 #include <WiFiUDP.h>
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
-#define onems 0.24576
-#define twoms 0.49152
-#define onepfivems = .36894
-#define negfourfive =  0.3072
-#define fourfive = .4227
 
+//create definitions for min and max pulse lengths for the servo
+#define servomin 100
+#define servomax 600
 
-//4us per tick on a 60hz system. 
-//pulse start will be 0, end will be pulse length (in miliseconds) divided by # of microseconds per tick. 
-//our servos: 1ms = -90, 1.5ms = 0, 2ms = 90.
-//number value is postves to teh right. 
-
+//declare the SSID and password
 const char *ssid = "Sub";
 const char *password = "appleluv";
+//set port that UDP communication shoudl occur through.
 unsigned int port = 1234;
 WiFiUDP Udp;
 char packetBuffer[255];
@@ -28,10 +24,9 @@ void setup() {
   Wire.begin(0, 2); //0 is SDA, 2 is SCL
   driver.begin();
   driver.setPWMFreq(60);
-  yield();
   Serial.begin(115200);
   Serial.println();
-  Serial.print("Boot complete, setting up network");
+  Serial.print("Boot complete, setting up network ");
   WiFi.softAP(ssid,password);
   IPAddress myIP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
@@ -42,12 +37,15 @@ void setup() {
 
 double setServoPulse(uint8_t n, int pulse) {
   double pulselength;
-  
   pulselength = 1000000;   // 1,000,000 us per second
   pulselength /= 60;   // 60 Hz  
   pulselength /= 4096;  // 12 bits of resolution
   pulse /= pulselength;
   return pulse;
+}
+
+int degToPulse(int deg){
+  return map(deg, -90, 90, servomin, servomax);
 }
 
 int readPacket(){
@@ -83,14 +81,13 @@ int msgToArray(int msg){
 }
 
 void servoControl(int fronts, int backs, int rudder, int throttle){
-  
+  if(control[1] = 1){
+    driver.setPWM(1, 0, 0);
+  }
 }
  
 void loop() {
   // put your main code here, to run repeatedly:
   msgToArray(readPacket());
-  if(control[1] = 1){
-    
-  }
 }
 
