@@ -84,7 +84,7 @@ char controlRead(){
     default:
     break;
   }
-  int speed = map(ts, 0, 255, 0, 100);
+  int speed = map(ts, 0, 1023, 0, 99);
   msg = msg + speed;
   String str;
   str = String(msg);
