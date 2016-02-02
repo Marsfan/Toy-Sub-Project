@@ -4,6 +4,8 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
+#define motor 16 //define motor as pin 16
+
 //create definitions for min and max pulse lengths for the servo
 #define servomin 100
 #define servomax 600
@@ -22,6 +24,7 @@ Adafruit_PWMServoDriver driver = Adafruit_PWMServoDriver(0x40);
 void setup() {
   delay(1000); 
   Wire.begin(0, 2); //0 is SDA, 2 is SCL
+  pinMode(motor, OUTPUT); //set pin 16 as output
   driver.begin();
   driver.setPWMFreq(60);
   Serial.begin(115200);
@@ -82,8 +85,8 @@ int msgToArray(int msg){
 
 
 //servo mapping: 0= front left, 1 = front right, 2 = back right, 3 = back left, 4 = rudder;
-void servoControl(int fronts, int backs, int rudder, int throttle){
-  if(control[1] = 1){
+void servoControl(){
+  if(control[0] = 1){
     driver.setPWM(0, 0, degToPulse(45));
     driver.setPWM(1, 0, degToPulse(-45));
   }else if(control[1] = 2){
@@ -93,7 +96,7 @@ void servoControl(int fronts, int backs, int rudder, int throttle){
     driver.setPWM(0, 0, 0);
     driver.setPWM(1, 0, 0);
   }
-  if(control[2] = 1){
+  if(control[1] = 1){
     driver.setPWM(2, 0, degToPulse(-45));
     driver.setPWM(3, 0, degToPulse(45));
   }else if(control[2]){
@@ -103,10 +106,25 @@ void servoControl(int fronts, int backs, int rudder, int throttle){
     driver.setPWM(2, 0, 0);
     driver.setPWM(3, 0, 0);
   }
+  if(control[2] = 1){
+    driver.setPWM(4, 0, degToPulse(45));
+  }else if(control[2]){
+    driver.setPWM(4, 0, degToPulse(-45));
+  }else{
+    driver.setPWM(4, 0, 0);
+  }
+  if(control[3] < 50){
+    analogWrite(motor, map(control[3], 49, 0, 0, 1023));
+  }else if (control[3] > 50){
+    analogWrite(motor, map(control[3], 50, 100, 0, 1023));
+  }else if (control[3] == 0){
+    analogWrite(control[3], 0);
+  }
 }
  
 void loop() {
   // put your main code here, to run repeatedly:
   msgToArray(readPacket());
+  servoControl();
 }
 
