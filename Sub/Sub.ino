@@ -14,7 +14,7 @@
 const char *ssid = "Sub";
 const char *password = "appleluv";
 //set port that UDP communication shoudl occur through.
-unsigned int port = 1234;
+unsigned int port = 2390;
 WiFiUDP Udp;
 char packetBuffer[255];
 int control[] = {0,0,0,00};
@@ -29,7 +29,7 @@ void setup() {
   driver.setPWMFreq(60);
   Serial.begin(115200);
   Serial.println();
-  Serial.print("Boot complete, setting up network ");
+  Serial.println("Boot complete, setting up network ");
   WiFi.softAP(ssid,password);
   IPAddress myIP = WiFi.softAPIP();
   Serial.print("AP IP address: ");

@@ -4,7 +4,7 @@
 
 const char *ssid = "Sub";
 const char *password = "appleluv";
-unsigned int port = 1234;
+unsigned int port = 2390;
 WiFiUDP Udp;
 
 
@@ -12,7 +12,12 @@ WiFiUDP Udp;
 //for fins: 1 means up, 2 means down
 //for rudder, 1 means left, 2 means right
 //throttle: 0-49 throttle backwards (0 is highest). 50-99 (99 is highest)
+
+//declare message array that will contain code sent to sub
 char message[] = "00000";
+//crate message integer for sending
+
+//declare pins needed for the controller
 int msg;
 int up = 2;
 int down = 0;
@@ -21,7 +26,8 @@ int right = 5;
 int throttle = A0;
 int buttonStates;
 
-IPAddress SubIp(129, 6, 15, 28);
+//set main sub IP address. 
+IPAddress SubIp(192, 168, 4, 1);
 
 
 void setup() {
@@ -81,8 +87,7 @@ char controlRead(){
     case(0000): //no buttons pressed
       msg = 00000;
     break;
-    default:
-    break;
+    Serial.println(UPs);
   }
   int speed = map(ts, 0, 1023, 0, 99);
   msg = msg + speed;
@@ -95,4 +100,5 @@ char controlRead(){
 void loop() {
   // put your main code here, to run repeatedly:
   beam(controlRead());
+  
 }
