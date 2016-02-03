@@ -39,20 +39,21 @@ void setup() {
   pinMode(down, INPUT_PULLUP);
   pinMode(left, INPUT_PULLUP);
   pinMode(right, INPUT_PULLUP);
+  Udp.begin(port);
   delay(1000);
 }
 
 
 
 void beam(char stuff){
-  Udp.beginPacket(SubIp, 1234);
+  Udp.beginPacket(SubIp, port);
   Udp.write(stuff);
   Udp.endPacket();  
+  Serial.println(stuff);
 }
 
 char controlRead(){
-  msg = 0;
-  buttonStates = 0;
+  int ts = analogRead(throttle);
   if(digitalRead(up) && !digitalRead(down)){
     msg = 12000;
   }else if(!digitalRead(up) && digitalRead(down)){
@@ -72,12 +73,12 @@ char controlRead(){
   String str;
   str = String(msg);
   str.toCharArray(message,2);
- // return msg;
-  Serial.println(msg);
+ // Serial.println(msg);
+  return message[6];
 }
 
 void loop() {
   //put your main code here, to run repeatedly:
-  //beam(controlRead());
- controlRead();
+ beam(controlRead());
+ //controlRead();
 }
