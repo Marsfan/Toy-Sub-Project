@@ -51,7 +51,7 @@ void setup() {
 
 
 //this function sends the data that is placed in syle beam(stuff_to_send)
-void beam(char stuff){
+void beam(char stuff[6]){
   //begin transmission of packet to the sub on the needed port
   Udp.beginPacket(SubIp, port);
   //write the data to the sub
