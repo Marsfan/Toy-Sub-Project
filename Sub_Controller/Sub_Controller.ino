@@ -19,12 +19,11 @@ char message[] = "00000";
 
 //declare pins needed for the controller
 int msg;
-int up = 2;
-int down = 0;
-int left = 4;
+int up = 13;
+int down = 12;
+int left = 14;
 int right = 5;
 int throttle = A0;
-int buttonStates;
 
 //set main sub IP address. 
 IPAddress SubIp(192, 168, 4, 1);
@@ -36,10 +35,10 @@ void setup() {
   Serial.begin(115200);
   Serial.println();
   WiFi.begin(ssid, password);
-  pinMode(up, INPUT);
-  pinMode(down, INPUT);
-  pinMode(left, INPUT);
-  pinMode(right, INPUT);
+  pinMode(up, INPUT_PULLUP);
+  pinMode(down, INPUT_PULLUP);
+  pinMode(left, INPUT_PULLUP);
+  pinMode(right, INPUT_PULLUP);
   delay(1000);
 }
 
@@ -52,53 +51,33 @@ void beam(char stuff){
 }
 
 char controlRead(){
+  msg = 0;
   buttonStates = 0;
-  int UPs = digitalRead(up);
-  int DNs = 10 * digitalRead(down);
-  int Ls = 100 * digitalRead(left);
-  int Rs = 1000 * digitalRead(right);
-  int ts = analogRead(throttle);
-  buttonStates = UPs + DNs + Ls + Rs;
-  switch(buttonStates){
-    case(0001): //up button
-      msg = 12000;
-    break;
-    case(0010): //down button
-      msg = 21000;
-    break;
-    case(0100): //left button
-      msg = 00100;
-    break;
-    case(1000): //right button
-      msg = 00200;
-    break;
-    case(0101):
-      msg = 12100; //up and left
-    break;
-    case(1001): //up right
-      msg = 12200;
-    break;
-    case(0110): //down left
-      msg = 21100;
-    break;
-    case(1010): //down right
-      msg = 21200;
-    break;
-    case(0000): //no buttons pressed
-      msg = 00000;
-    break;
-    Serial.println(UPs);
+  if(digitalRead(up) && !digitalRead(down)){
+    msg = 12000;
+  }else if(!digitalRead(up) && digitalRead(down)){
+    msg = 21000;
+  }else{
+    msg = 0;
   }
+  if(!digitalRead(left) && digitalRead(right)){
+    msg = msg + 100;
+  }else if (digitalRead(left) && !digitalRead(right)){
+    msg = msg + 200;
+  }else{
+    msg = msg;
+  } 
   int speed = map(ts, 0, 1023, 0, 99);
   msg = msg + speed;
   String str;
   str = String(msg);
   str.toCharArray(message,2);
-  return msg;
+ // return msg;
+  Serial.println(msg);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  beam(controlRead());
-  
+  //put your main code here, to run repeatedly:
+  //beam(controlRead());
+ controlRead();
 }
