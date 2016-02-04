@@ -19,7 +19,7 @@ char message[6];
 
 //declare pins needed for the controller
 int msg;
-int up = 13;
+int up = 0;
 int down = 12;
 int left = 14;
  int right = 5;
@@ -28,6 +28,7 @@ int throttle = A0;
 //set main sub IP address. 
 IPAddress SubIp(192, 168, 4, 1);
 
+int status = WL_IDLE_STATUS;
 
 void setup() {
   // put your setup code here, to run once:
@@ -37,6 +38,10 @@ void setup() {
   Serial.println();
   //Connect to wifi network created by sub
   WiFi.begin(ssid, password);
+  while (status != WL_CONNECTED) {
+    Serial.print("Attempting to connect to WPA SSID: ");
+    Serial.println(ssid);
+  }
   //setup the pins for reading the fin conrtol
   pinMode(up, INPUT_PULLUP);
   pinMode(down, INPUT_PULLUP);

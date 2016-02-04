@@ -7,8 +7,8 @@
 #define motor 16 //define motor as pin 16
 
 //create definitions for min and max pulse lengths for the servo
-#define servomin 100
-#define servomax 600
+#define servomin 0
+#define servomax 598
 
 //declare the SSID and password
 const char *ssid = "Sub";
@@ -17,13 +17,13 @@ const char *password = "appleluv";
 unsigned int port = 2390;
 WiFiUDP Udp;
 char packetBuffer[255];
-int control[] = {0,0,0,00};
+int control[6];
 
 Adafruit_PWMServoDriver driver = Adafruit_PWMServoDriver(0x40);
 
 void setup() {
   delay(1000); 
-  Wire.begin(0, 2); //0 is SDA, 2 is SCL
+  Wire.begin(12, 13); //0 is SDA, 2 is SCL
   pinMode(motor, OUTPUT); //set pin 16 as output
   driver.begin();
   driver.setPWMFreq(60);
@@ -36,6 +36,7 @@ void setup() {
   Serial.println(myIP);
   Udp.begin(port);
   Udp.flush();
+  yield();
 }
 
 double setServoPulse(uint8_t n, int pulse) {
@@ -63,12 +64,12 @@ int readPacket(){
       Serial.println(packetBuffer);
       }
   int message;
-  message = packetBuffer[6]-'0';
-  return message;
+  // message = packetBuffer[6]-'0';
+  return packetBuffer[1];
   }
   
 
-int msgToArray(int msg){
+/*int msgToArray(int msg){
   uint8_t front, back, rudder, throttle;
   front = msg / 10000;
   msg = msg - front * 10000;
@@ -81,7 +82,7 @@ int msgToArray(int msg){
   control[1] = back;
   control[2] = rudder;
   control[3] = throttle;
-}
+}*/
 
 
 //servo mapping: 0= front left, 1 = front right, 2 = back right, 3 = back left, 4 = rudder;
@@ -89,7 +90,7 @@ void servoControl(){
   if(control[0] = 1){
     driver.setPWM(0, 0, degToPulse(45));
     driver.setPWM(1, 0, degToPulse(-45));
-  }else if(control[1] = 2){
+  }else if(control[0] = 2){
     driver.setPWM(0, 0, degToPulse(-45));
     driver.setPWM(1, 0, degToPulse(45));
   }else{
@@ -99,7 +100,7 @@ void servoControl(){
   if(control[1] = 1){
     driver.setPWM(2, 0, degToPulse(-45));
     driver.setPWM(3, 0, degToPulse(45));
-  }else if(control[2]){
+  }else if(control[1]){
     driver.setPWM(2, 0, degToPulse(45));
     driver.setPWM(3, 0, degToPulse(-45));
   }else{
@@ -124,7 +125,8 @@ void servoControl(){
  
 void loop() {
   // put your main code here, to run repeatedly:
-  msgToArray(readPacket());
-  servoControl();
+ // msgToArray(readPacket());
+  //servoControl();
+ Serial.println(readPacket());
 }
 
