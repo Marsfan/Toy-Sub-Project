@@ -3,6 +3,8 @@
 #include <WiFiUDP.h>
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
+String stuff;
+int msg;
 
 #define motor 16 //define motor as pin 16
 
@@ -11,32 +13,32 @@
 #define servomax 598
 
 //declare the SSID and password
-const char *ssid = "Sub";
+const char *ssid = "OhPLease";
 const char *password = "appleluv";
 //set port that UDP communication shoudl occur through.
 unsigned int port = 2390;
 WiFiUDP Udp;
-char packetBuffer[255];
+char packetBuffer[6];
 int control[6];
 
 Adafruit_PWMServoDriver driver = Adafruit_PWMServoDriver(0x40);
 
 void setup() {
   delay(1000); 
-  Wire.begin(12, 13); //0 is SDA, 2 is SCL
-  pinMode(motor, OUTPUT); //set pin 16 as output
-  driver.begin();
-  driver.setPWMFreq(60);
   Serial.begin(115200);
   Serial.println();
+  WiFi.mode(WIFI_AP);
   Serial.println("Boot complete, setting up network ");
   WiFi.softAP(ssid,password);
   IPAddress myIP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
+  Wire.begin(12, 13); //0 is SDA, 2 is SCL
+  pinMode(motor, OUTPUT); //set pin 16 as output
+  driver.begin();
+  driver.setPWMFreq(60);
   Serial.println(myIP);
   Udp.begin(port);
-  Udp.flush();
-  yield();
+  delay(1000);
 }
 
 double setServoPulse(uint8_t n, int pulse) {
@@ -57,76 +59,87 @@ int readPacket(){
   if(packetSize) {
     Serial.println("Recieved Packet");
     int len = Udp.read(packetBuffer, 255);
-    Serial.println(len);
-      if (len > 0){
-        packetBuffer[len] = 0;
-       } 
+    Serial.println(len);      
       Serial.println(packetBuffer);
       }
-  int message;
-  // message = packetBuffer[6]-'0';
-  return packetBuffer[1];
-  }
+}
   
 
-/*int msgToArray(int msg){
+int msgToArray(){
   uint8_t front, back, rudder, throttle;
-  front = msg / 10000;
-  msg = msg - front * 10000;
-  back = msg / 1000;
-  msg = msg - back * 1000;
-  rudder = msg / 100;
-  msg = msg - rudder * 100;
-  throttle = msg;
-  control[0] = front;
-  control[1] = back;
-  control[2] = rudder;
-  control[3] = throttle;
-}*/
+  stuff = "";
+  for(int k = 0; k<6; k++){
+    stuff += packetBuffer[k];
+  }
+}
 
 
-//servo mapping: 0= front left, 1 = front right, 2 = back right, 3 = back left, 4 = rudder;
+
 void servoControl(){
-  if(control[0] = 1){
+  if(stuff == "UDLF"){
     driver.setPWM(0, 0, degToPulse(45));
     driver.setPWM(1, 0, degToPulse(-45));
-  }else if(control[0] = 2){
+    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(45));
+    //TODO: SET MOTOR
+  }else if (stuff == "UDLB"){
+    driver.setPWM(0, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(45));
+    //TODO: SET MOTOR
+  }else if (stuff == "UDRF"){
+    driver.setPWM(0, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    //TODO: SET MOTOR
+  }else if (stuff == "UDRB"){
+    driver.setPWM(0, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    //TODO: SET MOTOR
+  }else if (stuff == "DULF"){
     driver.setPWM(0, 0, degToPulse(-45));
     driver.setPWM(1, 0, degToPulse(45));
-  }else{
-    driver.setPWM(0, 0, 0);
-    driver.setPWM(1, 0, 0);
-  }
-  if(control[1] = 1){
-    driver.setPWM(2, 0, degToPulse(-45));
-    driver.setPWM(3, 0, degToPulse(45));
-  }else if(control[1]){
-    driver.setPWM(2, 0, degToPulse(45));
-    driver.setPWM(3, 0, degToPulse(-45));
-  }else{
-    driver.setPWM(2, 0, 0);
-    driver.setPWM(3, 0, 0);
-  }
-  if(control[2] = 1){
-    driver.setPWM(4, 0, degToPulse(45));
-  }else if(control[2]){
-    driver.setPWM(4, 0, degToPulse(-45));
-  }else{
-    driver.setPWM(4, 0, 0);
-  }
-  if(control[3] < 50){
-    analogWrite(motor, map(control[3], 49, 0, 0, 1023));
-  }else if (control[3] > 50){
-    analogWrite(motor, map(control[3], 50, 100, 0, 1023));
-  }else if (control[3] == 0){
-    analogWrite(control[3], 0);
-  }
+    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(45));
+    //TODO: SET MOTOR
+  }else if (stuff == "DULB"){
+    driver.setPWM(0, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(45));
+    //TODO: SET MOTOR
+  }else if (stuff == "DURF"){
+    driver.setPWM(0, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    //TODO: SET MOTOR
+  }else if(stuff = "DURB"){
+    driver.setPWM(0, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(1, 0, degToPulse(-45));
+    //TODO: SET MOTOR
+  }                
+delay(100);
 }
  
 void loop() {
   // put your main code here, to run repeatedly:
- // msgToArray(readPacket());
-  //servoControl();
- Serial.println(readPacket());
-}
+  readPacket();
+  msgToArray();
+  servoControl();
+  }
 
