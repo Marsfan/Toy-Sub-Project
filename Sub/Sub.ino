@@ -79,58 +79,58 @@ void servoControl(){
   if(stuff == "UDLF"){
     driver.setPWM(0, 0, degToPulse(45));
     driver.setPWM(1, 0, degToPulse(-45));
-    driver.setPWM(1, 0, degToPulse(-45));
-    driver.setPWM(1, 0, degToPulse(45));
-    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(2, 0, degToPulse(-45));
+    driver.setPWM(3, 0, degToPulse(45));
+    driver.setPWM(4, 0, degToPulse(45));
     //TODO: SET MOTOR
   }else if (stuff == "UDLB"){
     driver.setPWM(0, 0, degToPulse(45));
     driver.setPWM(1, 0, degToPulse(-45));
-    driver.setPWM(1, 0, degToPulse(-45));
-    driver.setPWM(1, 0, degToPulse(45));
-    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(2, 0, degToPulse(-45));
+    driver.setPWM(3, 0, degToPulse(45));
+    driver.setPWM(4, 0, degToPulse(45));
     //TODO: SET MOTOR
   }else if (stuff == "UDRF"){
     driver.setPWM(0, 0, degToPulse(45));
     driver.setPWM(1, 0, degToPulse(-45));
-    driver.setPWM(1, 0, degToPulse(-45));
-    driver.setPWM(1, 0, degToPulse(45));
-    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(2, 0, degToPulse(-45));
+    driver.setPWM(3, 0, degToPulse(45));
+    driver.setPWM(4, 0, degToPulse(-45));
     //TODO: SET MOTOR
   }else if (stuff == "UDRB"){
     driver.setPWM(0, 0, degToPulse(45));
     driver.setPWM(1, 0, degToPulse(-45));
-    driver.setPWM(1, 0, degToPulse(-45));
-    driver.setPWM(1, 0, degToPulse(45));
-    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(2, 0, degToPulse(-45));
+    driver.setPWM(3, 0, degToPulse(45));
+    driver.setPWM(4, 0, degToPulse(-45));
     //TODO: SET MOTOR
   }else if (stuff == "DULF"){
     driver.setPWM(0, 0, degToPulse(-45));
     driver.setPWM(1, 0, degToPulse(45));
-    driver.setPWM(1, 0, degToPulse(45));
-    driver.setPWM(1, 0, degToPulse(-45));
-    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(2, 0, degToPulse(45));
+    driver.setPWM(3, 0, degToPulse(-45));
+    driver.setPWM(4, 0, degToPulse(45));
     //TODO: SET MOTOR
   }else if (stuff == "DULB"){
     driver.setPWM(0, 0, degToPulse(-45));
     driver.setPWM(1, 0, degToPulse(45));
-    driver.setPWM(1, 0, degToPulse(45));
-    driver.setPWM(1, 0, degToPulse(-45));
-    driver.setPWM(1, 0, degToPulse(45));
+    driver.setPWM(2, 0, degToPulse(45));
+    driver.setPWM(3, 0, degToPulse(-45));
+    driver.setPWM(4, 0, degToPulse(45));
     //TODO: SET MOTOR
   }else if (stuff == "DURF"){
     driver.setPWM(0, 0, degToPulse(-45));
     driver.setPWM(1, 0, degToPulse(45));
-    driver.setPWM(1, 0, degToPulse(45));
-    driver.setPWM(1, 0, degToPulse(-45));
-    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(2, 0, degToPulse(45));
+    driver.setPWM(3, 0, degToPulse(-45));
+    driver.setPWM(4, 0, degToPulse(-45));
     //TODO: SET MOTOR
   }else if(stuff = "DURB"){
     driver.setPWM(0, 0, degToPulse(-45));
     driver.setPWM(1, 0, degToPulse(45));
-    driver.setPWM(1, 0, degToPulse(45));
-    driver.setPWM(1, 0, degToPulse(-45));
-    driver.setPWM(1, 0, degToPulse(-45));
+    driver.setPWM(2, 0, degToPulse(45));
+    driver.setPWM(3, 0, degToPulse(-45));
+    driver.setPWM(4, 0, degToPulse(-45));
     //TODO: SET MOTOR
   }                
 delay(100);
